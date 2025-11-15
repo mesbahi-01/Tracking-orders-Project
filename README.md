@@ -36,7 +36,9 @@ npm run build
 npm run preview
 ```
 
-**See [DEPLOYMENT.md](./DEPLOYMENT.md) for deployment instructions** to Vercel, Netlify, or GitHub Pages.
+**See [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md) for step-by-step GitHub Pages deployment** (free hosting with auto-deploy).
+
+For other platforms, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 
 ## Project Structure
 
