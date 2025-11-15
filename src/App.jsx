@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Login from './components/Login'
 import OrderForm from './components/OrderForm'
 import OrderList from './components/OrderList'
 import { getOrdersSortedDesc, addOrder, updateOrder, toggleDelivered, searchOrders, getOrder, cancelOrder, deleteOrder } from './db'
@@ -7,15 +8,38 @@ export default function App() {
   const [orders, setOrders] = useState([])
   const [search, setSearch] = useState('')
   const [editing, setEditing] = useState(null)
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  // Check if user is already logged in on app load
+  useEffect(() => {
+    const auth = localStorage.getItem('auth_user')
+    if (auth) {
+      try {
+        setUser(JSON.parse(auth))
+      } catch (e) {
+        console.error('Failed to parse auth:', e)
+        localStorage.removeItem('auth_user')
+      }
+    }
+    setLoading(false)
+  }, [])
+
+  // Load orders when user logs in
+  useEffect(() => {
+    if (user) {
+      load()
+    }
+  }, [user])
 
   async function load() {
-    const data = await getOrdersSortedDesc()
-    setOrders(data)
+    try {
+      const data = await getOrdersSortedDesc()
+      setOrders(data)
+    } catch (e) {
+      console.error('Failed to load orders:', e)
+    }
   }
-
-  useEffect(() => {
-    load()
-  }, [])
 
   async function onAdd(order) {
     await addOrder(order)
@@ -56,10 +80,33 @@ export default function App() {
     setEditing(o)
   }
 
+  function handleLogout() {
+    // Clear auth only, keep IndexedDB data
+    localStorage.removeItem('auth_user')
+    setUser(null)
+    // Don't clear orders - they persist in IndexedDB
+    setSearch('')
+    setEditing(null)
+  }
+
+  if (loading) {
+    return <div className="loading">Loading...</div>
+  }
+
+  if (!user) {
+    return <Login onLogin={setUser} />
+  }
+
   return (
     <div className="app">
       <header>
-        <h1>Tracking Orders</h1>
+        <div className="header-content">
+          <h1>Tracking Orders</h1>
+          <div className="user-info">
+            <span>User: {user.username}</span>
+            <button className="logout-btn" onClick={handleLogout}>Logout</button>
+          </div>
+        </div>
       </header>
 
       <div className="search-row">
