@@ -11,9 +11,9 @@ body {
 }
 
 .app {
-    max-width: 900px;
-    margin: 24px auto;
-    padding: 16px
+    /* max-width: 900px; */
+    margin-top: 24px;
+    padding: 16px;
 }
 
 .login-container {
@@ -320,10 +320,10 @@ button:disabled {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-height: 600px;
+    /* max-height: 600px;
     overflow-y: auto;
-    overflow-x: hidden;
-    padding-right: 8px
+    overflow-x: hidden; 
+    padding-right: 8px*/
 }
 
 .order-card {

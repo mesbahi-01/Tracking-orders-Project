@@ -21,7 +21,7 @@
   },
   "form": {
     "client": "Client",
-    "desiredDate": "Desired date (yyyy/mm/dd)",
+    "desiredDate": "Desired date",
     "items": "Items",
     "product": "Product",
     "quantity": "Quantity",
