@@ -101,5 +101,15 @@ Current authentication is **simple localStorage-based** for basic security.
 - Orders are per-browser/device (IndexedDB is local)
 - To share orders across devices, integrate a backend database
 
+## Multilanguage support
+
+This app includes basic multilanguage support using `i18next` and `react-i18next`.
+
+- A language selector is available in the header (English / Français).
+- Translations live under `src/locales/` as JSON files (`en.json`, `fr.json`).
+- To add a new language, create a new `src/locales/xx.json` with the same keys and restart the dev server.
+
+The selected language is persisted to `localStorage` so the app remembers your preference.
+
 See [DEPLOYMENT.md](./DEPLOYMENT.md) for deployment & troubleshooting.
 

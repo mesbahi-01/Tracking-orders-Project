@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Login from './components/Login'
 import OrderForm from './components/OrderForm'
 import OrderList from './components/OrderList'
+import LanguageSwitcher from './components/LanguageSwitcher'
 import { getOrdersSortedDesc, addOrder, updateOrder, toggleDelivered, searchOrders, getOrder, cancelOrder, deleteOrder } from './db'
 
 export default function App() {
@@ -10,6 +12,7 @@ export default function App() {
   const [editing, setEditing] = useState(null)
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const { t } = useTranslation()
 
   // Check if user is already logged in on app load
   useEffect(() => {
@@ -63,7 +66,7 @@ export default function App() {
   }
 
   async function onDelete(id) {
-    if (confirm('Are you sure you want to delete this order?')) {
+    if (confirm(t('order.deleteConfirm'))) {
       await deleteOrder(id)
       await load()
     }
@@ -90,7 +93,7 @@ export default function App() {
   }
 
   if (loading) {
-    return <div className="loading">Loading...</div>
+    return <div className="loading">{t('loading')}</div>
   }
 
   if (!user) {
@@ -101,10 +104,13 @@ export default function App() {
     <div className="app">
       <header>
         <div className="header-content">
-          <h1>Tracking Orders</h1>
-          <div className="user-info">
-            <span>User: {user.username}</span>
-            <button className="logout-btn" onClick={handleLogout}>Logout</button>
+          <h1>{t('app.title')}</h1>
+          <div className="header-right">
+            <LanguageSwitcher />
+            <div className="user-info">
+              <span>{t('header.user')}: {user.username}</span>
+              <button className="logout-btn" onClick={handleLogout}>{t('header.logout')}</button>
+            </div>
           </div>
         </div>
       </header>
@@ -112,7 +118,7 @@ export default function App() {
       <div className="search-row">
         <input
           aria-label="Search orders"
-          placeholder="Search by client or product"
+          placeholder={t('search.placeholder')}
           value={search}
           onChange={e => onSearch(e.target.value)}
         />
@@ -128,7 +134,7 @@ export default function App() {
       <OrderList orders={orders} onToggle={onToggle} onEdit={startEdit} onCancel={onCancel} onDelete={onDelete} />
 
       <footer>
-        <small>Offline-capable PWA using IndexedDB</small>
+        <small>{t('app.offline')}</small>
       </footer>
     </div>
   )

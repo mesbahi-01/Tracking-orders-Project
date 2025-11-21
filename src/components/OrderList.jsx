@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 function formatDate(dateStr) {
   if (!dateStr) return '-'
@@ -29,6 +30,7 @@ function formatDateTime(isoStr) {
 }
 
 function OrderCard({ order, onToggle, onEdit, onCancel, onDelete }) {
+  const { t } = useTranslation()
   const [expanded, setExpanded] = useState(false)
 
   return (
@@ -39,18 +41,18 @@ function OrderCard({ order, onToggle, onEdit, onCancel, onDelete }) {
             type="button"
             className="expand-btn"
             onClick={() => setExpanded(!expanded)}
-            title={expanded ? 'Collapse' : 'Expand'}
+            title={expanded ? t('expand.collapse') : t('expand.expand')}
           >
             {expanded ? '▼' : '▶'}
           </button>
           <strong>{order.client}</strong>
           <span className={`status ${order.cancelled ? 'cancelled' : order.delivered ? 'delivered' : 'pending'}`}>
-            {order.cancelled ? 'Cancelled' : order.delivered ? 'Delivered' : 'Pending'}
+            {order.cancelled ? t('order.status.cancelled') : order.delivered ? t('order.status.delivered') : t('order.status.pending')}
           </span>
         </div>
         <div className="dates">
-          <small>Desired: {formatDate(order.desiredDate)}</small>
-          <small>Created: {formatDateTime(order.createdAt)}</small>
+          <small>{t('order.desired')}: {formatDate(order.desiredDate)}</small>
+          <small>{t('order.created')}: {formatDateTime(order.createdAt)}</small>
         </div>
       </div>
 
@@ -67,16 +69,16 @@ function OrderCard({ order, onToggle, onEdit, onCancel, onDelete }) {
 
       <div className="order-actions">
         <button onClick={() => onToggle(order.id)}>
-          {order.delivered ? 'Mark Undelivered' : 'Mark Delivered'}
+          {order.delivered ? t('order.markUndelivered') : t('order.markDelivered')}
         </button>
         <button className="secondary" onClick={() => onEdit(order.id)}>
-          Edit
+          {t('order.edit')}
         </button>
         <button className={order.cancelled ? 'secondary' : 'danger'} onClick={() => onCancel(order.id)}>
-          {order.cancelled ? 'Undo' : 'Cancel'}
+          {order.cancelled ? t('order.undo') : t('order.cancel')}
         </button>
         <button className="danger" onClick={() => onDelete(order.id)}>
-          Delete
+          {t('order.delete')}
         </button>
       </div>
     </div>
@@ -84,7 +86,8 @@ function OrderCard({ order, onToggle, onEdit, onCancel, onDelete }) {
 }
 
 export default function OrderList({ orders, onToggle, onEdit, onCancel, onDelete }) {
-  if (!orders || orders.length === 0) return <p className="empty">No orders yet</p>
+  const { t } = useTranslation()
+  if (!orders || orders.length === 0) return <p className="empty">{t('empty.noOrders')}</p>
 
   return (
     <div className="order-list">

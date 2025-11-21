@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export default function Login({ onLogin }) {
+  const { t } = useTranslation()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -8,7 +10,7 @@ export default function Login({ onLogin }) {
   function handleSubmit(e) {
     e.preventDefault()
     if (!username.trim() || !password.trim()) {
-      setError('Username and password required')
+      setError(t('login.required'))
       return
     }
     // Simple authentication: store in localStorage
@@ -19,32 +21,32 @@ export default function Login({ onLogin }) {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1>Tracking Orders</h1>
+        <h1>{t('app.title')}</h1>
         <form onSubmit={handleSubmit} className="login-form">
           <label>
-            Username
+            {t('login.username')}
             <input
               type="text"
               value={username}
               onChange={e => setUsername(e.target.value)}
-              placeholder="Enter username"
+              placeholder={t('login.placeholderUsername')}
               required
             />
           </label>
           <label>
-            Password
+            {t('login.password')}
             <input
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              placeholder="Enter password"
+              placeholder={t('login.placeholderPassword')}
               required
             />
           </label>
           {error && <p className="error-message">{error}</p>}
-          <button type="submit">Login</button>
+          <button type="submit">{t('login.login')}</button>
         </form>
-        <p className="hint">Use any username/password to continue</p>
+        <p className="hint">{t('login.hint')}</p>
       </div>
     </div>
   )

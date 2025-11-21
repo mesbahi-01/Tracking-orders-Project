@@ -1,0 +1,63 @@
+{
+  "app": {
+    "title": "Suivi des commandes",
+    "offline": "PWA capable hors-ligne utilisant IndexedDB"
+  },
+  "login": {
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "login": "Se connecter",
+    "hint": "Utilisez n'importe quel nom d'utilisateur/mot de passe pour continuer",
+    "required": "Nom d'utilisateur et mot de passe requis",
+    "placeholderUsername": "Entrez le nom d'utilisateur",
+    "placeholderPassword": "Entrez le mot de passe"
+  },
+  "header": {
+    "user": "Utilisateur",
+    "logout": "Se déconnecter"
+  },
+  "search": {
+    "placeholder": "Rechercher par client ou produit"
+  },
+  "form": {
+    "client": "Client",
+    "desiredDate": "Date souhaitée (aaaa/mm/jj)",
+    "items": "Articles",
+    "product": "Produit",
+    "quantity": "Quantité",
+    "unit": "Unité",
+    "addItem": "Ajouter l'article",
+    "remove": "Supprimer",
+    "save": "Enregistrer",
+    "addOrder": "Ajouter la commande",
+    "cancel": "Annuler",
+    "pleaseEnterProduct": "Veuillez entrer un nom de produit",
+    "pleaseEnterQuantity": "Veuillez entrer une quantité valide",
+    "pleaseEnterClient": "Veuillez entrer un nom de client",
+    "pleaseAddItem": "Veuillez ajouter au moins un article"
+  },
+  "order": {
+    "desired": "Souhaité",
+    "created": "Créé",
+    "status": {
+      "cancelled": "Annulé",
+      "delivered": "Livré",
+      "pending": "En attente"
+    },
+    "markDelivered": "Marquer comme livré",
+    "markUndelivered": "Marquer comme non livré",
+    "edit": "Modifier",
+    "cancel": "Annuler",
+    "undo": "Annuler",
+    "delete": "Supprimer",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette commande ?"
+  },
+  "empty": {
+    "noOrders": "Pas encore de commandes"
+  },
+  "loading": "Chargement...",
+  "expand": {
+    "expand": "Déplier",
+    "collapse": "Replier"
+  }
+}
