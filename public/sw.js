@@ -1,10 +1,10 @@
 const CACHE_NAME = 'tracking-orders-cache-v1'
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
 ]
 
 self.addEventListener('install', (event) => {
@@ -36,6 +36,6 @@ self.addEventListener('fetch', (event) => {
         cache.put(req, resClone)
       })
       return res
-    }).catch(() => caches.match(req).then(cached => cached || caches.match('/index.html')))
+    }).catch(() => caches.match(req).then(cached => cached || caches.match('./index.html')))
   )
 })

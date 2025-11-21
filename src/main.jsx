@@ -7,7 +7,9 @@ import './styles.css'
 // Register service worker for PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(err => {
+    // Use Vite base so SW path works when app is served under a subpath
+    const swUrl = `${import.meta.env.BASE_URL}sw.js`
+    navigator.serviceWorker.register(swUrl).catch(err => {
       // registration failed
       console.warn('SW registration failed:', err)
     })
