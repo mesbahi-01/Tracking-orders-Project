@@ -17,6 +17,8 @@ export default function OrderForm({ onAdd, editing, onEdit, cancelEdit }) {
   const [product, setProduct] = useState('')
   const [quantity, setQuantity] = useState('')
   const [unit, setUnit] = useState('Ton')
+  const [clients, setClients] = useState([])
+  const [newClient, setNewClient] = useState('')
 
   useEffect(() => {
     if (editing) {
@@ -29,6 +31,31 @@ export default function OrderForm({ onAdd, editing, onEdit, cancelEdit }) {
     }
   }, [editing])
 
+  // load clients from localStorage or initialize defaults
+  useEffect(() => {
+    // associate clients with current user
+    let username = 'default'
+    try {
+      const auth = localStorage.getItem('auth_user')
+      if (auth) username = JSON.parse(auth).username || 'default'
+    } catch {}
+    const storageKey = `clients_${username}`
+
+    const stored = localStorage.getItem(storageKey)
+    if (stored) {
+      try {
+        setClients(JSON.parse(stored))
+      } catch (e) {
+        setClients([])
+      }
+    } else {
+      const defaults = [
+      ]
+      setClients(defaults)
+      try { localStorage.setItem(storageKey, JSON.stringify(defaults)) } catch {}
+    }
+  }, [])
+
   function reset() {
     setClient('')
     setDesiredDate(getDefaultDesiredDate())
@@ -36,6 +63,27 @@ export default function OrderForm({ onAdd, editing, onEdit, cancelEdit }) {
     setProduct('')
     setQuantity('')
     setUnit('Ton')
+  }
+
+  function addClient() {
+    const name = newClient.trim()
+    if (!name) return
+    if (clients.includes(name)) {
+      setNewClient('')
+      setClient(name)
+      return
+    }
+    const next = [...clients, name]
+    setClients(next)
+    try {
+      let username = 'default'
+      const auth = localStorage.getItem('auth_user')
+      if (auth) username = JSON.parse(auth).username || 'default'
+      const storageKey = `clients_${username}`
+      localStorage.setItem(storageKey, JSON.stringify(next))
+    } catch {}
+    setNewClient('')
+    setClient(name)
   }
 
   function addItem() {
@@ -82,7 +130,19 @@ export default function OrderForm({ onAdd, editing, onEdit, cancelEdit }) {
       <div className="row">
         <label>
           {t('form.client')}
-          <input value={client} onChange={e => setClient(e.target.value)} required />
+          <select value={client} onChange={e => setClient(e.target.value)} required>
+            <option value="">--</option>
+            {clients.map((c, i) => (
+              <option key={i} value={c}>{c}</option>
+            ))}
+          </select>
+        </label>
+        <label className="add-client">
+          {t('form.addClient')}
+          <div className="add-client-row">
+            <input value={newClient} onChange={e => setNewClient(e.target.value)} placeholder={t('form.newClientPlaceholder')} />
+            <button type="button" className="secondary" onClick={addClient}>{t('form.addClient')}</button>
+          </div>
         </label>
         <label>
           {t('form.desiredDate')}

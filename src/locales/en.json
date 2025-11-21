@@ -34,7 +34,9 @@
     "pleaseEnterProduct": "Please enter a product name",
     "pleaseEnterQuantity": "Please enter a valid quantity",
     "pleaseEnterClient": "Please enter a client name",
-    "pleaseAddItem": "Please add at least one item"
+    "pleaseAddItem": "Please add at least one item",
+    "addClient": "Add client",
+    "newClientPlaceholder": "New client name"
   },
   "order": {
     "desired": "Desired",
