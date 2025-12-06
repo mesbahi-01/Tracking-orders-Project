@@ -17,26 +17,21 @@
     "logout": "Se déconnecter"
   },
   "search": {
-    "placeholder": "Rechercher par client ou produit"
+    "placeholder": "Rechercher par client ou détails de la commande"
   },
   "form": {
     "client": "Client",
     "desiredDate": "Date souhaitée ",
-    "items": "Articles",
-    "product": "Produit",
-    "quantity": "Quantité",
-    "unit": "Unité",
-    "addItem": "Ajouter l'article",
-    "remove": "Supprimer",
     "save": "Enregistrer",
     "addOrder": "Ajouter la commande",
     "cancel": "Annuler",
-    "pleaseEnterProduct": "Veuillez entrer un nom de produit",
-    "pleaseEnterQuantity": "Veuillez entrer une quantité valide",
     "pleaseEnterClient": "Veuillez entrer un nom de client",
-    "pleaseAddItem": "Veuillez ajouter au moins un article",
     "addClient": "Ajouter un client",
-    "newClientPlaceholder": "Nom du nouveau client"
+    "newClientPlaceholder": "Nom du nouveau client",
+    "orderDetails": "Détails de la commande",
+    "orderDetailsPlaceholder": "Entrez les détails de la commande",
+    "pleaseEnterOrderDetails": "Veuillez entrer les détails de la commande",
+    "clientPlaceholder": "Sélectionnez ou ajoutez un client"
   },
   "order": {
     "desired": "Souhaité",
@@ -61,5 +56,24 @@
   "expand": {
     "expand": "Déplier",
     "collapse": "Replier"
+  },
+  "clients": {
+    "title": "Gérer les clients",
+    "newClientPlaceholder": "Nom du nouveau client",
+    "addClient": "Ajouter un client",
+    "noClients": "Aucun client pour le moment.",
+    "alreadyExists": "Un client avec ce nom existe déjà.",
+    "deleteWarning": "Ce client a des commandes existantes et ne peut pas être supprimé.",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce client ?",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "deleteSelected": "Supprimer la sélection",
+    "editSelected": "Modifier la sélection",
+    "deleteSelectedWarning": "Les clients suivants ont des commandes existantes et ne peuvent pas être supprimés : ",
+    "deleteSelectedConfirm": "Êtes-vous sûr de vouloir supprimer les clients sélectionnés ?"
+  },
+  "nav": {
+    "orders": "Commandes",
+    "clients": "Clients"
   }
 }

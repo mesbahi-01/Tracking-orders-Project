@@ -2,17 +2,42 @@ import { openDB } from 'idb'
 
 const DB_NAME = 'orders-db'
 const STORE_NAME = 'orders'
-const VERSION = 1
+const VERSION = 2
 
 async function getDB() {
   return openDB(DB_NAME, VERSION, {
-    upgrade(db) {
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true })
+    async upgrade(db, oldVersion, newVersion, transaction) {
+      let store;
+      if (oldVersion < 1) {
+        // creating db for first time
+        store = db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true })
         store.createIndex('client', 'client', { unique: false })
-        store.createIndex('product', 'product', { unique: false })
+        store.createIndex('orderDetails', 'orderDetails', { unique: false })
         store.createIndex('desiredDate', 'desiredDate', { unique: false })
         store.createIndex('createdAt', 'createdAt', { unique: false })
+      } else {
+        store = transaction.objectStore(STORE_NAME);
+      }
+
+      if (oldVersion < 2) {
+        if (store.indexNames.contains('product')) {
+          store.deleteIndex('product');
+        }
+        if (!store.indexNames.contains('orderDetails')) {
+            store.createIndex('orderDetails', 'orderDetails', { unique: false });
+        }
+
+        // data migration
+        let cursor = await store.openCursor();
+        while (cursor) {
+            const value = { ...cursor.value };
+            if (value.items && Array.isArray(value.items)) {
+                value.orderDetails = value.items.map(item => `${item.product} (${item.quantity} ${item.unit})`).join(', ');
+                delete value.items;
+                await cursor.update(value);
+            }
+            cursor = await cursor.continue();
+        }
       }
     }
   })
@@ -23,7 +48,7 @@ export async function addOrder(order) {
   const toAdd = {
     client: order.client || '',
     desiredDate: order.desiredDate || new Date().toISOString().split('T')[0],
-    items: order.items || [], // array of { product, quantity, unit }
+    orderDetails: order.orderDetails || '',
     delivered: order.delivered || false,
     cancelled: order.cancelled || false,
     createdAt: new Date().toISOString()
@@ -77,10 +102,12 @@ export async function searchOrders(query) {
   const lower = (query || '').toLowerCase()
   if (!lower) return getOrdersSortedDesc()
   const all = await getOrdersSortedDesc()
-  return all.filter(o =>
-    (o.client || '').toLowerCase().includes(lower) ||
-    (o.product || '').toLowerCase().includes(lower)
-  )
+  return all.filter(o => {
+    const clientMatch = (o.client || '').toLowerCase().includes(lower);
+    const orderDetailsMatch = (o.orderDetails || '').toLowerCase().includes(lower);
+    const itemsMatch = o.items && o.items.some(item => (item.product || '').toLowerCase().includes(lower));
+    return clientMatch || orderDetailsMatch || itemsMatch;
+  })
 }
 
 export async function getOrder(id) {
@@ -91,4 +118,28 @@ export async function getOrder(id) {
 export async function deleteOrder(id) {
   const db = await getDB()
   await db.delete(STORE_NAME, id)
+}
+
+export async function updateClientInOrders(oldName, newName) {
+    const db = await getDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    const store = tx.objectStore(STORE_NAME);
+    const index = store.index('client');
+    let cursor = await index.openCursor(IDBKeyRange.only(oldName));
+    while (cursor) {
+        const value = { ...cursor.value };
+        value.client = newName;
+        cursor.update(value);
+        cursor = await cursor.continue();
+    }
+    await tx.done;
+}
+
+export async function hasOrders(clientName) {
+    const db = await getDB();
+    const tx = db.transaction(STORE_NAME, 'readonly');
+    const store = tx.objectStore(STORE_NAME);
+    const index = store.index('client');
+    const count = await index.count(IDBKeyRange.only(clientName));
+    return count > 0;
 }

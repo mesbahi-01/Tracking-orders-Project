@@ -17,26 +17,21 @@
     "logout": "Logout"
   },
   "search": {
-    "placeholder": "Search by client or product"
+    "placeholder": "Search by client or order details"
   },
   "form": {
     "client": "Client",
     "desiredDate": "Desired date",
-    "items": "Items",
-    "product": "Product",
-    "quantity": "Quantity",
-    "unit": "Unit",
-    "addItem": "Add Item",
-    "remove": "Remove",
     "save": "Save",
     "addOrder": "Add order",
     "cancel": "Cancel",
-    "pleaseEnterProduct": "Please enter a product name",
-    "pleaseEnterQuantity": "Please enter a valid quantity",
     "pleaseEnterClient": "Please enter a client name",
-    "pleaseAddItem": "Please add at least one item",
     "addClient": "Add client",
-    "newClientPlaceholder": "New client name"
+    "newClientPlaceholder": "New client name",
+    "orderDetails": "Order Details",
+    "orderDetailsPlaceholder": "Enter order details",
+    "pleaseEnterOrderDetails": "Please enter the order details",
+    "clientPlaceholder": "Select or add client"
   },
   "order": {
     "desired": "Desired",
@@ -61,5 +56,24 @@
   "expand": {
     "expand": "Expand",
     "collapse": "Collapse"
+  },
+  "clients": {
+    "title": "Manage Clients",
+    "newClientPlaceholder": "New client name",
+    "addClient": "Add Client",
+    "noClients": "No clients yet.",
+    "alreadyExists": "A client with this name already exists.",
+    "deleteWarning": "This client has existing orders and cannot be deleted.",
+    "deleteConfirm": "Are you sure you want to delete this client?",
+    "save": "Save",
+    "cancel": "Cancel",
+    "deleteSelected": "Delete Selected",
+    "editSelected": "Edit Selected",
+    "deleteSelectedWarning": "The following clients have existing orders and cannot be deleted: ",
+    "deleteSelectedConfirm": "Are you sure you want to delete the selected clients?"
+  },
+  "nav": {
+    "orders": "Orders",
+    "clients": "Clients"
   }
 }

@@ -1,115 +1,45 @@
-# Tracking Orders PWA
+# Final Summary of All Changes
 
-Small PWA to track orders (React + Vite + IndexedDB) with built-in authentication.
+This document summarizes all the features, bug fixes, and refactoring implemented during our session.
 
-## Features
-- Single interface with search bar
-- Form: Client, Desired date, Multiple items (Product, Quantity, Unit)
-- Order list with status badges (Pending, Delivered, Cancelled)
-- Each order card: toggle delivered/undelivered, edit, cancel (undo), delete
-- Offline-capable via service worker
-- Data persists in IndexedDB locally
-- **Simple login/authentication** with logout
-- Sticky header and form for easy access while scrolling
-- Scrollable order list with flex-based responsive layout
+## Version 0.2.0: "Order Details" Feature
 
-## Quick Start
+-   **Replaced "Items" with "Order Details"**:
+    -   The multi-field "Items" section in the order form was replaced with a single "Order Details" text field.
+    -   The database schema was updated to store `orderDetails` instead of an `items` array.
+    -   The order list was updated to display `orderDetails`.
+    -   The search functionality was updated to search `orderDetails`.
 
-1. Install deps
-```powershell
-npm install
-```
+## Version 0.3.0: Data Migration & Backward Compatibility
 
-2. Run dev server
-```powershell
-npm run dev
-```
+-   **Database Migration (`src/db.js`)**:
+    -   Implemented a data migration script to automatically convert existing orders from the old `items` array format to the new `orderDetails` string format.
+-   **Backward-Compatible UI & Search**:
+    -   The UI and search function were made backward-compatible to handle any non-migrated orders, ensuring they are still displayed and searchable.
 
-3. Open browser to `http://localhost:5173`
-4. Login with any username/password (stored in browser localStorage)
+## Version 0.4.0: UX Improvements & Bug Fixes
 
-## Build & Deploy
+-   **Backward-Compatible Editing**:
+    -   The "Edit" functionality was fixed to handle old orders. When editing an old order, the `items` array is now automatically converted to a string and displayed in the "Order Details" field.
+-   **Scroll to Top on Edit**:
+    -   The page now automatically scrolls to the top when a user clicks the "Edit" button, improving user experience.
 
-For production build:
-```powershell
-npm run build
-npm run preview
-```
+## Version 0.5.0: Client Management Page
 
-**See [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md) for step-by-step GitHub Pages deployment** (free hosting with auto-deploy).
+-   **Routing**: `react-router-dom` was added to the project to enable navigation.
+-   **New "Clients" Page**:
+    -   A dedicated page for managing clients was created at `src/pages/Clients.jsx`.
+-   **Code Refactoring**:
+    -   The application was refactored to use a page-based structure (`src/pages/Orders.jsx`, `src/pages/Clients.jsx`).
+    -   Client management logic was centralized in a new `src/clients.js` module.
+    -   A `Layout.jsx` component was created to provide a consistent UI with navigation.
+-   **Bug Fix**:
+    -   Fixed a bug in the `addClient` function to be case-insensitive.
 
-For other platforms, see [DEPLOYMENT.md](./DEPLOYMENT.md).
+## Version 0.6.0: Edit/Delete Clients
 
-## Project Structure
-
-```
-src/
-├── main.jsx              # App entry, SW registration
-├── App.jsx               # Main app with auth logic
-├── db.js                 # IndexedDB wrapper
-├── styles.css            # All styling
-├── sw.js                 # Service worker for offline/caching
-└── components/
-    ├── Login.jsx         # Login form
-    ├── OrderForm.jsx     # Create/edit orders with items
-    └── OrderList.jsx     # Display orders, expandable items
-public/
-├── manifest.json         # PWA manifest
-└── icon-*.png            # PWA icons (placeholder)
-```
-
-## How It Works
-
-1. **Login**: Enter any username/password (stored in localStorage)
-2. **Create Order**: 
-   - Enter client name and desired date
-   - Add multiple items (Product, Quantity, Unit)
-   - Click "Add order"
-3. **Manage Orders**:
-   - Search by client or product
-   - Click expand arrow to see items
-   - Toggle delivery status
-   - Edit or delete orders
-   - Cancel/undo cancelled orders
-4. **Logout**: Click logout button in top-right
-5. **PWA Install**: On mobile, tap menu → Install app (after deployed)
-
-## Technology Stack
-
-- **React 18** - UI framework
-- **Vite 5** - Build tool
-- **IndexedDB** (via `idb` package) - Local storage
-- **Service Worker** - Offline support & caching
-- **PWA Manifest** - Installability
-
-## Authentication
-
-Current authentication is **simple localStorage-based** for basic security.
-- Credentials stored in browser (not secure for sensitive data)
-- For production, integrate with a backend or Firebase
-
-## Offline Support
-
-- App shell cached by service worker
-- All orders stored in IndexedDB
-- Works fully offline after first install
-- Install as PWA for persistent app
-
-## Notes
-
-- Icons (`public/icon-192.png`, `public/icon-512.png`) are placeholders; replace with actual icons for better PWA install UX
-- Orders are per-browser/device (IndexedDB is local)
-- To share orders across devices, integrate a backend database
-
-## Multilanguage support
-
-This app includes basic multilanguage support using `i18next` and `react-i18next`.
-
-- A language selector is available in the header (English / Français).
-- Translations live under `src/locales/` as JSON files (`en.json`, `fr.json`).
-- To add a new language, create a new `src/locales/xx.json` with the same keys and restart the dev server.
-
-The selected language is persisted to `localStorage` so the app remembers your preference.
-
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for deployment & troubleshooting.
-
+-   **Client CRUD Operations**:
+    -   Added "Edit" and "Delete" functionality to the client management page.
+-   **Data Consistency**:
+    -   When a client's name is updated, all of their existing orders are now automatically updated with the new name.
+    -   A client cannot be deleted if they have existing orders, preventing data integrity issues.

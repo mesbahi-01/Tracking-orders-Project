@@ -110,7 +110,34 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px
+    gap: 16px;
+    margin-top: 12px;
+}
+
+nav {
+    display: flex;
+    gap: 8px;
+    background: #eef2ff;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--accent);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+nav a:hover {
+    background: #dde5ff;
+}
+
+nav a.active {
+    background: var(--accent);
+    color: #fff;
 }
 
 header h1 {
@@ -153,14 +180,15 @@ header h1 {
     top: 60px;
     z-index: 100; */
     background: #f7f9fc;
-    padding: 12px 0
+    padding: 12px 0;
 }
 
 .search-row input {
-    width: 100%;
+    width: 99%;
     padding: 10px;
     border-radius: 6px;
-    border: 1px solid #ddd
+    border: 1px solid #ddd;
+    margin: 0 auto;
 }
 
 .order-form {
@@ -455,4 +483,63 @@ footer {
     display: flex;
     gap: 8px;
     align-items: center;
+}
+
+.clients-page {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.add-client-form {
+  display: flex;
+  gap: 8px;
+}
+
+.add-client-form input {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.client-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.client-list ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.client-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #e6e9ef;
+  border-radius: 8px;
+}
+
+.client-list li input[type="checkbox"] {
+  margin: 0;
+}
+
+.client-list li span {
+  flex-grow: 1;
+  font-weight: 500;
+}
+
+.client-list li input[type="text"] {
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
 }

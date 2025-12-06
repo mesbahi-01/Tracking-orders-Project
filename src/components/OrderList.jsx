@@ -56,14 +56,18 @@ function OrderCard({ order, onToggle, onEdit, onCancel, onDelete }) {
         </div>
       </div>
 
-      {expanded && order.items && order.items.length > 0 && (
+      {expanded && (
         <div className="items-detail">
-          {order.items.map((item, idx) => (
-            <div key={idx} className="item-detail-row">
-              <span className="item-detail-product">{item.product}</span>
-              <span className="item-detail-qty">{item.quantity} {item.unit}</span>
-            </div>
-          ))}
+          {order.orderDetails ? (
+            <p>{order.orderDetails}</p>
+          ) : (
+            order.items && order.items.length > 0 && order.items.map((item, idx) => (
+              <div key={idx} className="item-detail-row">
+                <span className="item-detail-product">{item.product}</span>
+                <span className="item-detail-qty">{item.quantity} {item.unit}</span>
+              </div>
+            ))
+          )}
         </div>
       )}
 
