@@ -1,19 +1,19 @@
 {
   "name": "Tracking Orders",
   "short_name": "Orders",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/Tracking-orders-Project/",
+  "scope": "/Tracking-orders-Project/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0b69ff",
   "icons": [
     {
-      "src": "./icon-192.png",
+      "src": "/Tracking-orders-Project/icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "./icon-512.png",
+      "src": "/Tracking-orders-Project/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
