@@ -19,7 +19,7 @@ if ('serviceWorker' in navigator) {
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/Tracking-orders-Project">
       <App />
     </BrowserRouter>
   </React.StrictMode>
