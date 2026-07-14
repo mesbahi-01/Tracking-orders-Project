@@ -74,6 +74,7 @@
   },
   "nav": {
     "orders": "Orders",
-    "clients": "Clients"
+    "clients": "Clients",
+    "dailyReports": "Daily Reports"
   }
 }

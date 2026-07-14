@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Layout from './components/Layout';
 import Orders from './pages/Orders';
 import Clients from './pages/Clients';
+import DailyReports from './pages/DailyReportsPage';
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -41,6 +42,7 @@ export default function App() {
         <Route path="/" element={<Layout user={user} handleLogout={handleLogout} />}>
           <Route index element={<Orders />} />
           <Route path="clients" element={<Clients />} />
+          <Route path="daily-reports" element={<DailyReports />} />
         </Route>
       )}
       <Route path="*" element={<Navigate to={user ? '/' : '/login'} />} />

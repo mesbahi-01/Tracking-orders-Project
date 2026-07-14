@@ -14,7 +14,8 @@ export default function Layout({ user, handleLogout }) {
           <nav>
             <Link to="/">{t('nav.orders')}</Link>
             <Link to="/clients">{t('nav.clients')}</Link>
-          </nav>
+              <Link to="/daily-reports">{t('nav.dailyReports')}</Link>
+            </nav>
           <div className="header-right">
             <LanguageSwitcher />
             <div className="user-info">

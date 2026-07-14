@@ -74,6 +74,7 @@
   },
   "nav": {
     "orders": "Commandes",
-    "clients": "Clients"
+    "clients": "Clients",
+    "dailyReports": "Rapports Quotidiens"
   }
 }
