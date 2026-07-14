@@ -72,6 +72,75 @@
     "deleteSelectedWarning": "Les clients suivants ont des commandes existantes et ne peuvent pas être supprimés : ",
     "deleteSelectedConfirm": "Êtes-vous sûr de vouloir supprimer les clients sélectionnés ?"
   },
+  "dailyReports": {
+    "title": "Rapports Quotidiens",
+    "subtitle": "Capturez une date, un client et des notes vocales pour vos activités quotidiennes.",
+    "createNew": "Créer un nouveau rapport",
+    "editReport": "Modifier le rapport",
+    "noReports": "Aucun rapport n'a été créé.",
+    "noReportsMatch": "Aucun rapport ne correspond à vos critères de recherche ou de filtre.",
+    "foundReports": "Trouvé {{count}} rapport",
+    "foundReports_plural": "Trouvé {{count}} rapports",
+    "form": {
+      "date": "Date",
+      "client": "Client",
+      "clientPlaceholder": "Choisissez un client existant ou entrez un nouveau",
+      "notes": "Notes",
+      "notesPlaceholder": "Ajoutez du contexte pour le rapport quotidien",
+      "voiceNotes": "Notes vocales",
+      "recordAudio": "Enregistrer de l'audio",
+      "recording": "Enregistrement…",
+      "stopRecording": "Arrêter l'enregistrement",
+      "uploadAudio": "Télécharger de l'audio",
+      "addNote": "Ajouter cette note",
+      "discardAudio": "Abandonner",
+      "removeAudio": "Supprimer l'audio",
+      "recordingHint": "Enregistrez l'audio directement depuis votre navigateur/appareil ou téléchargez un fichier audio existant.",
+      "addedNotes": "Notes vocales ajoutées",
+      "noVoiceNote": "Veuillez ajouter au moins une note vocale.",
+      "recordingUnsupported": "L'enregistrement audio n'est pas pris en charge par ce navigateur.",
+      "microphoneError": "Impossible d'accéder au microphone. Veuillez autoriser l'accès au microphone et réessayer.",
+      "voiceNoteAttached": "Note vocale attachée",
+      "voiceNoteReady": "Note vocale prête"
+    },
+    "list": {
+      "title": "Rapports Quotidiens Précédents",
+      "empty": "Aucun rapport n'a été créé.",
+      "noMatch": "Aucun rapport ne correspond à vos critères de recherche ou de filtre.",
+      "voiceNotes": "Notes vocales",
+      "created": "Créé",
+      "updated": "Modifié",
+      "savedDate": "Enregistré {{date}}"
+    },
+    "search": {
+      "placeholder": "Rechercher par client, notes ou date..."
+    },
+    "filters": {
+      "all": "Tous",
+      "today": "Aujourd'hui",
+      "week": "7 derniers jours",
+      "month": "30 derniers jours"
+    },
+    "actions": {
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "cancelEditing": "Annuler la modification",
+      "saveReport": "Enregistrer le rapport quotidien",
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce rapport ?",
+      "deleteSuccess": "Rapport quotidien supprimé.",
+      "saveSuccess": "Rapport quotidien enregistré avec succès !",
+      "updateSuccess": "Rapport quotidien modifié avec succès !",
+      "loadError": "Échec du chargement des rapports. Veuillez réessayer.",
+      "saveError": "Échec de l'enregistrement du rapport. Veuillez réessayer.",
+      "deleteError": "Échec de la suppression du rapport. Veuillez réessayer."
+    },
+    "validation": {
+      "dateRequired": "Veuillez sélectionner une date.",
+      "clientRequired": "Veuillez fournir un nom de client.",
+      "voiceNotesRequired": "Veuillez enregistrer ou télécharger une note vocale avant d'enregistrer le rapport.",
+      "audioRequired": "Veuillez enregistrer ou télécharger de l'audio avant d'ajouter."
+    }
+  },
   "nav": {
     "orders": "Commandes",
     "clients": "Clients",
