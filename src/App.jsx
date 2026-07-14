@@ -36,16 +36,15 @@ export default function App() {
 
   return (
     <Routes>
-      {!user ? (
-        <Route path="/login" element={<Login onLogin={setUser} />} />
-      ) : (
+      <Route path="/login" element={<Login onLogin={setUser} />} />
+      {user && (
         <Route path="/" element={<Layout user={user} handleLogout={handleLogout} />}>
           <Route index element={<Orders />} />
           <Route path="clients" element={<Clients />} />
           <Route path="daily-reports" element={<DailyReports />} />
         </Route>
       )}
-      <Route path="*" element={<Navigate to={user ? '/' : '/login'} />} />
+      <Route path="*" element={user ? <Navigate to="/" /> : <Navigate to="/login" />} />
     </Routes>
   );
 }
