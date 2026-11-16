@@ -25,12 +25,51 @@ function initialView(located, fitTo, circle) {
   return { center: DEFAULT_CENTER, zoom: DEFAULT_ZOOM }
 }
 
+// Floating overlays (search pill, layer toggle, zoom/locate, chips, sheet) are siblings of the map
+// inside its parent. Measure them so fitted markers stay clear; fall back to sane defaults.
+const OVERLAY_SEL = '.map-topbar, .map-overlays, .farm-map-controls, .farm-map-fabs, .map-missing-chip, .farm-sheet'
+export function fitOptions(map) {
+  const base = { top: 120, bottom: 80, right: 56 }
+  const fallback = { paddingTopLeft: [16, base.top + 16], paddingBottomRight: [16 + base.right, base.bottom + 16] }
+  try {
+    const box = map.getContainer().getBoundingClientRect()
+    const host = map.getContainer().parentElement?.parentElement
+    if (!host || !box.width || !box.height) return fallback
+    let top = 0, bottom = 0, right = 0
+    host.querySelectorAll(OVERLAY_SEL).forEach((el) => {
+      const r = el.getBoundingClientRect()
+      if (!r.width || !r.height) return
+      const t = Math.max(0, r.top - box.top), b = Math.min(box.height, r.bottom - box.top)
+      if (b <= 0 || t >= box.height) return
+      if ((t + b) / 2 < box.height / 2) top = Math.max(top, b)
+      else bottom = Math.max(bottom, box.height - t)
+      // Only narrow right-edge buttons reduce the usable width, not wide bars/sheets.
+      if (r.width < box.width / 2 && r.right > box.right - 40) right = Math.max(right, box.right - r.left)
+    })
+    const room = Math.max(0, box.height - 100)
+    const T = Math.min(top || base.top, room / 2), B = Math.min(bottom || base.bottom, room / 2)
+    return { paddingTopLeft: [16, T + 16], paddingBottomRight: [16 + (right || base.right), B + 16] }
+  } catch {
+    return fallback
+  }
+}
+
+// Fits the initial farm view once, after the sibling overlays exist in the DOM.
+function InitialFit({ view }) {
+  const map = useMap()
+  useEffect(() => {
+    if (view.bounds) map.fitBounds(view.bounds, { ...fitOptions(map), animate: false })
+    else if (view.center) map.fitBounds(L.latLngBounds([view.center, view.center]), { ...fitOptions(map), maxZoom: view.zoom, animate: false })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  return null
+}
+
 // Re-fits when the circle (center/radius) changes while fitTo === 'circle'.
 function CircleFit({ circle, fitTo }) {
   const map = useMap()
   const key = circle ? `${circle.center.lat},${circle.center.lng},${circle.radiusKm}` : ''
   useEffect(() => {
-    if (fitTo === 'circle' && circle) map.fitBounds(circleLatLngBounds(circle), { padding: [20, 20] })
+    if (fitTo === 'circle' && circle) map.fitBounds(circleLatLngBounds(circle), fitOptions(map))
   }, [key, fitTo]) // eslint-disable-line react-hooks/exhaustive-deps
   return null
 }
@@ -121,6 +160,7 @@ export default function FarmMap({ farms, selectedId, onSelect, circle, origin, f
         {myLoc && <Marker position={[myLoc.lat, myLoc.lng]} icon={dotIcon} interactive={false} />}
         {focus && <Marker position={[focus.lat, focus.lng]} icon={placeIcon} interactive={false} />}
         <SizeWatcher />
+        {fitTo !== 'circle' && located.length > 0 && <InitialFit view={view} />}
         <CircleFit circle={circle} fitTo={fitTo} />
         <FocusPoint focus={focus} />
         <Controls layer={layer} setLayer={setLayer} onFix={setMyLoc} />
