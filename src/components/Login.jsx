@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { LogoMark } from './territory/icons'
 
 export default function Login({ onLogin }) {
   const { t } = useTranslation()
@@ -21,7 +22,11 @@ export default function Login({ onLogin }) {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h1>{t('app.title')}</h1>
+        <div className="login-brand">
+          <LogoMark size={56} />
+          <h1>{t('app.title')}</h1>
+          <p className="login-tagline">{t('login.tagline')}</p>
+        </div>
         <form onSubmit={handleSubmit} className="login-form">
           <label>
             {t('login.username')}
@@ -44,7 +49,7 @@ export default function Login({ onLogin }) {
             />
           </label>
           {error && <p className="error-message">{error}</p>}
-          <button type="submit">{t('login.login')}</button>
+          <button type="submit" className="btn-primary">{t('login.login')}</button>
         </form>
         <p className="hint">{t('login.hint')}</p>
       </div>

@@ -43,3 +43,21 @@ This document summarizes all the features, bug fixes, and refactoring implemente
 -   **Data Consistency**:
     -   When a client's name is updated, all of their existing orders are now automatically updated with the new name.
     -   A client cannot be deleted if they have existing orders, preventing data integrity issues.
+
+## Farm territory
+
+Map and manage poultry farms and their customers: a clustered map (street/satellite, with labels), farm and customer records, a "nearby" view, a dashboard and reports, and spreadsheet import/export. Map tiles you have already viewed are cached by the service worker and still display offline (no bulk tile prefetching).
+
+### Backup routine
+
+- Data -> **Export everything** produces a full backup file. Save it into the Google-Drive-synced folder.
+- On a new phone: open the app, go to Data -> **Restore** and pick the backup file.
+
+### Location rules
+
+- A farm location is never invented. Farms without coordinates have status **missing**; imported or uncertain coordinates are marked **verify** until confirmed.
+- Three ways to set a location: use the device GPS, pick it on the map, or paste coordinates / a map link.
+
+### Seed file
+
+Regenerate the spreadsheet seed with `npm run seed:xlsx`; it writes `Client's Farms/seed-farms.xlsx` (git-ignored). If `Client's Farms/seed-local.json` exists (private, git-ignored real data) it is used; otherwise a synthetic demo dataset is used.

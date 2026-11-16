@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import DailyReportsForm from '../components/DailyReportsForm'
 import DailyReportsList from '../components/DailyReportsList'
 import { loadDailyReports, saveDailyReports } from '../lib/dailyReportsStorage'
-import { getClients } from '../clients'
+import { getClientNames } from '../clients'
 import '../dailyReports.css'
 
 export default function DailyReportsPage() {
@@ -16,8 +16,14 @@ export default function DailyReportsPage() {
 
   useEffect(() => {
     loadReports()
-    setClients(getClients())
+    refreshClients()
   }, [])
+
+  function refreshClients() {
+    getClientNames()
+      .then(setClients)
+      .catch((error) => console.error('Failed to load clients:', error))
+  }
 
   async function loadReports() {
     try {
@@ -84,6 +90,7 @@ export default function DailyReportsPage() {
       await saveDailyReports(updated)
       setReports(updated)
       setEditingReport(null)
+      refreshClients()
       setTimeout(() => setSuccessMessage(''), 4000)
       setErrorMessage('')
     } catch (error) {

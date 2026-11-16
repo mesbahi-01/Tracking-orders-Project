@@ -2,11 +2,37 @@ import { openDB } from 'idb'
 
 const DB_NAME = 'orders-db'
 const STORE_NAME = 'orders'
-const VERSION = 2
+const VERSION = 3
+
+// Set while an upgrade waits for another tab/window still holding an older version.
+let dbBlocked = false
+const blockedListeners = new Set()
+function setDbBlocked(value) {
+  if (dbBlocked === value) return
+  dbBlocked = value
+  for (const fn of blockedListeners) {
+    try { fn(value) } catch (e) { console.error(e) }
+  }
+}
+export const isDbBlocked = () => dbBlocked
+export function onDbBlockedChange(fn) {
+  blockedListeners.add(fn)
+  return () => blockedListeners.delete(fn)
+}
 
 export async function getDB() {
-  return openDB(DB_NAME, VERSION, {
+  const db = await openDB(DB_NAME, VERSION, {
+    blocked() {
+      // an old tab ignores versionchange: tell the user instead of loading forever
+      setDbBlocked(true)
+    },
+    blocking(currentVersion, blockedVersion, event) {
+      // let a pending upgrade/delete proceed instead of hanging on this connection
+      event.target.close()
+    },
     async upgrade(db, oldVersion, newVersion, transaction) {
+      // All schema changes run synchronously first: nothing may be awaited
+      // before the last createObjectStore/createIndex. Data migration runs last.
       let store;
       if (oldVersion < 1) {
         // creating db for first time
@@ -24,23 +50,39 @@ export async function getDB() {
           store.deleteIndex('product');
         }
         if (!store.indexNames.contains('orderDetails')) {
-            store.createIndex('orderDetails', 'orderDetails', { unique: false });
+          store.createIndex('orderDetails', 'orderDetails', { unique: false });
         }
+      }
 
-        // data migration
+      if (oldVersion < 3) {
+        const customers = db.createObjectStore('customers', { keyPath: 'id' })
+        customers.createIndex('nameKey', 'nameKey', { unique: false })
+        customers.createIndex('region', 'region', { unique: false })
+        const farms = db.createObjectStore('farms', { keyPath: 'id' })
+        farms.createIndex('customerId', 'customerId', { unique: false })
+        farms.createIndex('status', 'status', { unique: false })
+        farms.createIndex('region', 'region', { unique: false })
+        db.createObjectStore('settings', { keyPath: 'key' })
+        store.createIndex('customerId', 'customerId', { unique: false })
+      }
+
+      // data migration (v1 items -> v2 orderDetails); only existing databases have data
+      if (oldVersion >= 1 && oldVersion < 2) {
         let cursor = await store.openCursor();
         while (cursor) {
-            const value = { ...cursor.value };
-            if (value.items && Array.isArray(value.items)) {
-                value.orderDetails = value.items.map(item => `${item.product} (${item.quantity} ${item.unit})`).join(', ');
-                delete value.items;
-                await cursor.update(value);
-            }
-            cursor = await cursor.continue();
+          const value = { ...cursor.value };
+          if (value.items && Array.isArray(value.items)) {
+            value.orderDetails = value.items.map(item => `${item.product} (${item.quantity} ${item.unit})`).join(', ');
+            delete value.items;
+            await cursor.update(value);
+          }
+          cursor = await cursor.continue();
         }
       }
     }
   })
+  setDbBlocked(false)
+  return db
 }
 
 export async function addOrder(order) {
@@ -51,6 +93,7 @@ export async function addOrder(order) {
     orderDetails: order.orderDetails || '',
     delivered: order.delivered || false,
     cancelled: order.cancelled || false,
+    customerId: order.customerId ?? null,
     createdAt: new Date().toISOString()
   }
   const id = await db.add(STORE_NAME, toAdd)

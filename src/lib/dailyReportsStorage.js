@@ -120,3 +120,21 @@ export function formatDisplayDate(value) {
     day: 'numeric'
   })
 }
+// Counts reports without loading them (voice notes can be large).
+export async function countDailyReports() {
+  if (typeof window === 'undefined') {
+    return 0
+  }
+
+  try {
+    const db = await openDb()
+
+    return await new Promise((resolve, reject) => {
+      const request = db.transaction(STORE_NAME, 'readonly').objectStore(STORE_NAME).count()
+      request.onsuccess = () => resolve(request.result)
+      request.onerror = () => reject(request.error)
+    })
+  } catch (error) {
+    return getFallbackReports().length
+  }
+}

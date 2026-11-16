@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { createDailyReportId } from '../lib/dailyReportsStorage'
+import { ensureCustomerId } from '../territory/customerLink'
+import { normalizeName } from '../territory/normalize'
+import CustomerPicker from './territory/CustomerPicker'
 
 export default function DailyReportsForm({ existingClients, onSubmit, onError, initialReport = null }) {
   const [date, setDate] = useState(initialReport?.date || '')
@@ -9,6 +13,9 @@ export default function DailyReportsForm({ existingClients, onSubmit, onError, i
   const [currentAudio, setCurrentAudio] = useState({ url: '', name: '' })
   const [isRecording, setIsRecording] = useState(false)
   const [recordingError, setRecordingError] = useState('')
+  const [picker, setPicker] = useState(null)
+  const [submitting, setSubmitting] = useState(false)
+  const { t } = useTranslation()
 
   const mediaRecorderRef = useRef(null)
   const audioChunksRef = useRef([])
@@ -139,7 +146,15 @@ export default function DailyReportsForm({ existingClients, onSubmit, onError, i
     setVoiceNotes(voiceNotes.filter((_, i) => i !== index))
   }
 
-  const handleSubmit = (event) => {
+  // resolves with a customer, null (new customer) or undefined (cancelled)
+  const askPicker = (customers) => new Promise((resolve) => setPicker({ customers, resolve }))
+
+  const closePicker = (result) => {
+    if (picker) picker.resolve(result)
+    setPicker(null)
+  }
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     if (!date) {
@@ -157,18 +172,44 @@ export default function DailyReportsForm({ existingClients, onSubmit, onError, i
       return
     }
 
-    onSubmit({
-      id: initialReport?.id || createDailyReportId(),
-      date,
-      client: client.trim(),
-      notes: notes.trim(),
-      voiceNotes,
-      createdAt: initialReport?.createdAt || new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    })
+    if (submitting) {
+      return
+    }
 
-    if (!initialReport) {
-      resetForm()
+    const trimmedClient = client.trim()
+    setSubmitting(true)
+    try {
+      let customerId
+      if (initialReport?.customerId && normalizeName(initialReport.client || '') === normalizeName(trimmedClient)) {
+        // same name as before: keep the existing link
+        customerId = initialReport.customerId
+      } else {
+        customerId = await ensureCustomerId(trimmedClient, askPicker)
+        if (!customerId) {
+          return // picker cancelled
+        }
+      }
+
+      await onSubmit({
+        ...initialReport,
+        id: initialReport?.id || createDailyReportId(),
+        date,
+        client: trimmedClient,
+        customerId,
+        notes: notes.trim(),
+        voiceNotes,
+        createdAt: initialReport?.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      })
+
+      if (!initialReport) {
+        resetForm()
+      }
+    } catch (error) {
+      console.error('Failed to resolve customer', error)
+      onError?.(error.message)
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -289,10 +330,19 @@ export default function DailyReportsForm({ existingClients, onSubmit, onError, i
       </div>
 
       <div className="form-actions">
-        <button type="submit" className="btn btn--primary">
+        <button type="submit" className="btn btn--primary" disabled={submitting}>
           Save Daily Report
         </button>
       </div>
+
+      {picker && (
+        <CustomerPicker
+          customers={picker.customers}
+          title={t('customerPicker.title')}
+          onPick={closePicker}
+          onCancel={() => closePicker(undefined)}
+        />
+      )}
     </form>
   )
 }

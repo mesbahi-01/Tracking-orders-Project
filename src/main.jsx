@@ -3,7 +3,9 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import './i18n'
 import App from './App'
+import '@fontsource-variable/inter'
 import './styles.css'
+import './territory.css'
 
 // Register service worker for PWA
 if ('serviceWorker' in navigator) {
