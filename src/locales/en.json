@@ -145,5 +145,11 @@
     "orders": "Orders",
     "clients": "Clients",
     "dailyReports": "Daily Reports"
+  },
+  "dataCopy": {
+    "button": "Download a copy of my data",
+    "working": "Preparing…",
+    "done": "Copy saved — orders: {{orders}}, daily reports: {{reports}}. Keep the file in your Google Drive folder.",
+    "failed": "Could not create the copy: {{message}}"
   }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
+import DataCopyButton from './DataCopyButton';
 
 export default function Layout({ user, handleLogout }) {
   const { t } = useTranslation();
@@ -25,6 +26,7 @@ export default function Layout({ user, handleLogout }) {
           </div>
         </div>
       </header>
+      <DataCopyButton />
       <main>
         <Outlet />
       </main>

@@ -4,7 +4,7 @@ const DB_NAME = 'orders-db'
 const STORE_NAME = 'orders'
 const VERSION = 2
 
-async function getDB() {
+export async function getDB() {
   return openDB(DB_NAME, VERSION, {
     async upgrade(db, oldVersion, newVersion, transaction) {
       let store;

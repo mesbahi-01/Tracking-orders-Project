@@ -145,5 +145,11 @@
     "orders": "Commandes",
     "clients": "Clients",
     "dailyReports": "Rapports Quotidiens"
+  },
+  "dataCopy": {
+    "button": "Télécharger une copie de mes données",
+    "working": "Préparation…",
+    "done": "Copie enregistrée — commandes : {{orders}}, rapports journaliers : {{reports}}. Gardez le fichier dans votre dossier Google Drive.",
+    "failed": "Impossible de créer la copie : {{message}}"
   }
 }

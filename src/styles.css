@@ -543,3 +543,28 @@ footer {
   border: 1px solid #ddd;
   border-radius: 6px;
 }
+.data-copy {
+    margin: 8px 0 16px;
+}
+
+.data-copy-btn {
+    min-height: 44px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    background: #fff;
+    color: var(--accent);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.data-copy-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+.data-copy-msg {
+    margin: 8px 0 0;
+    font-size: 14px;
+    color: #1b5e20;
+}
